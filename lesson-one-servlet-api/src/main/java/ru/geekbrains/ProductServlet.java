@@ -22,7 +22,19 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
+        resp.setCharacterEncoding("UTF-8");
         List<Product> productList = productRepository.findAll();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table border=\"1\" width=\"600\">\n");
+        sb.append("<tr><td><b>ID</b></td><td><b>Product</b></td></tr>\n");
+        for (Product product : productList) {
+            sb.append("<tr>\n");
+            sb.append("<td>"+product.getId()+"</td><td>"+product.getName()+"</td>\n");
+            sb.append("</tr>\n");
+        }
+        sb.append("</table>\n");
+        resp.getWriter().println(sb);
 
     }
 }

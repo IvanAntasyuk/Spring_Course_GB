@@ -1,3 +1,8 @@
 
 # Project exclude paths
 /lesson-one-servlet-api/target/
+.idea
+*.iws
+*.iml
+*.ipr
+.gitignore
