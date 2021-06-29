@@ -6,3 +6,7 @@
 *.iml
 *.ipr
 .gitignore
+*.class
+*.jar
+*.lst
+*.war

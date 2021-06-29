@@ -10,6 +10,7 @@
     <modules>
         <module>lesson-one-servlet-api</module>
         <module>lesson-two-spring</module>
+        <module>Lesson-three-spring-mvc</module>
     </modules>
     <packaging>pom</packaging>
 
