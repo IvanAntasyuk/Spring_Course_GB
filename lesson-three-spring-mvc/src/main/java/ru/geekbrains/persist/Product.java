@@ -1,10 +1,13 @@
 package ru.geekbrains.persist;
 
+
+
 public class Product {
     private Integer id;
     private String name;
     private Integer cost;
     private String desc;
+
 
     public Product() {
     }
@@ -22,6 +25,7 @@ public class Product {
     public void setId(Integer id) {
         this.id = id;
     }
+
 
     public String getName() {
         return name;
