@@ -1,6 +1,7 @@
-package ru.geekbrains;
+package ru.geekbrains.repository;
 
 import ru.geekbrains.entity.Product;
+import ru.geekbrains.service.MyEntityManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,9 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ProductRepository {
-
-    private EntityManagerFactory emFactory;
+public class ProductRepository extends MyEntityManager {
 
     public ProductRepository (EntityManagerFactory emFactory){
         this.emFactory=emFactory;
@@ -33,28 +32,14 @@ public class ProductRepository {
         executeInTransaction(em-> em.remove(delProd));
     }
 
-    private <R> R executeForEntityManger(Function<EntityManager, R> function){
-        EntityManager em = emFactory.createEntityManager();
-        try{
-            return function.apply(em);
-        }finally {
-            em.close();
-        }
+    @Override
+    protected <R> R executeForEntityManger(Function<EntityManager, R> function) {
+        return super.executeForEntityManger(function);
     }
 
-    private void executeInTransaction (Consumer<EntityManager> consumer){
-        EntityManager em = emFactory.createEntityManager();
-        try{
-            em.getTransaction().begin();
-            consumer.accept(em);
-            em.getTransaction().commit();
-        }catch (Exception e){
-            em.getTransaction().rollback();
-        }
-        finally {
-            em.close();
-        }
+    @Override
+    protected void executeInTransaction(Consumer<EntityManager> consumer) {
+        super.executeInTransaction(consumer);
     }
-
-
 }
+

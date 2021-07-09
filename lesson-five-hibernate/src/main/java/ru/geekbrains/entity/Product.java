@@ -1,9 +1,10 @@
 package ru.geekbrains.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +16,9 @@ public class Product {
 
     @Column(name = "price",nullable = false)
     int price;
+
+    @OneToMany(mappedBy = "product")
+    private List<Order> listProduct;
 
     public Product() {
     }
