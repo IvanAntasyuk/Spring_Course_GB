@@ -1,41 +1,53 @@
 package ru.geekbrains.persist;
 
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
+@Entity
+@Table(name = "products")
 public class Product {
-    private Integer id;
-    private String name;
-    private Integer cost;
-    private String desc;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    @NotBlank
+    private String title;
+
+    @Min(value = 0)
+    @Column(nullable = false)
+    private double cost;
 
     public Product() {
     }
 
-    public Product(String name, Integer cost, String desc) {
-        this.name = name;
+    public Product(String title, double cost) {
+        this.title = title;
         this.cost = cost;
-        this.desc = desc;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 }
