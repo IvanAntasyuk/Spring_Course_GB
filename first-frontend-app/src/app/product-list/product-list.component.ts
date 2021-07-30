@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {ProductService} from "../model/product.service";
+import { Component, OnInit } from '@angular/core';
 import {Product} from "../model/product";
+import {ProductService} from "../model/product.service";
 
 @Component({
   selector: 'app-product-list',
@@ -8,17 +8,17 @@ import {Product} from "../model/product";
   styleUrls: ['./product-list.component.scss']
 })
 export class ProductListComponent implements OnInit {
-  public products: Product[] = [];
+
+  public products: Product[]=[];
   public isError: boolean = false;
 
-  constructor(public productService: ProductService) {
-  }
+  constructor(public productService: ProductService) { }
 
   ngOnInit(): void {
-    this.retrieveProducts()
+    this.retrieveProduct();
   }
 
-  private retrieveProducts() {
+  private retrieveProduct(){
     this.productService.findAll()
       .then(res => {
         this.isError = false;
@@ -32,8 +32,8 @@ export class ProductListComponent implements OnInit {
 
   delete(id: number) {
     this.productService.delete(id)
-      .then(res => {
-        this.retrieveProducts();
+      .then(() => {
+        this.retrieveProduct();
       })
   }
 }

@@ -1,15 +1,15 @@
 package ru.geekbrains.interfaces;
 import org.springframework.data.domain.Page;
-import ru.geekbrains.service.ProductListParam;
+import ru.geekbrains.persist.ProductParams;
 import ru.geekbrains.persist.Product;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductService {
+public interface ProductInter {
 
     List<Product> findAll();
 
-    Page<Product> findWithFilter(ProductListParam productListParam);
+    Page<Product> findWithFilter(ProductParams productParams);
 
     Optional<Product> findById(Long id);
 

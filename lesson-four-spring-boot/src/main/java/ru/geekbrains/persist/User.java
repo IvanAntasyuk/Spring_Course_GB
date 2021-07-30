@@ -1,54 +1,41 @@
 package ru.geekbrains.persist;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+@Data
 @Entity
-@Table(name = "users")
+@Table(name="users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String username;
-
-    @Min(value = 18)
     @Column(nullable = false)
     private Integer age;
+
+    @NotBlank
+    @Column(length = 512,nullable = false)
+    private String username;
+
+    @Column
+    private String password;
 
     public User() {
     }
 
-    public User(String username, Integer age) {
+    public User(String username) {
         this.username = username;
-        this.age = age;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public User(Long id, String username, String password, Integer age) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
+        this.password = password;
         this.age = age;
     }
 }

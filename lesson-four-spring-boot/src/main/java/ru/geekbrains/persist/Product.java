@@ -3,6 +3,7 @@ package ru.geekbrains.persist;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
@@ -17,12 +18,12 @@ public class Product {
 
     @Min(value = 0)
     @Column(nullable = false)
-    private double cost;
+    private BigDecimal cost;
 
     public Product() {
     }
 
-    public Product(String title, double cost) {
+    public Product(String title, BigDecimal cost) {
         this.title = title;
         this.cost = cost;
     }
@@ -43,11 +44,11 @@ public class Product {
         this.title = title;
     }
 
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 }

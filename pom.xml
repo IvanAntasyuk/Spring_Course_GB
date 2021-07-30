@@ -13,6 +13,8 @@
         <module>lesson-three-spring-mvc</module>
         <module>lesson-four-spring-boot</module>
         <module>lesson-five-hibernate</module>
+        <module>lesson-seven-spring-data</module>
+
     </modules>
     <packaging>pom</packaging>
 

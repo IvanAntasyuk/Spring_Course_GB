@@ -1,32 +1,32 @@
 import { Component, OnInit } from '@angular/core';
+import {User} from "../model/user";
+import {UserService} from "../model/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Product} from "../model/product";
-import {ProductService} from "../model/product.service";
 
 @Component({
-  selector: 'app-product-form',
-  templateUrl: './product-form.component.html',
-  styleUrls: ['./product-form.component.scss']
+  selector: 'app-user-form',
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.scss']
 })
-export class ProductFormComponent implements OnInit {
+export class UserFormComponent implements OnInit {
 
-  public product = new Product(-1, "", 0);
+  public user = new User(-1, "", 0);
   public isError:boolean = false;
 
-  constructor(private productService: ProductService,
+  constructor(private userService: UserService,
               private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(param => {
       if (param.id == 'new') {
-        this.product = new Product(-1, "", 0);
+        this.user = new User(-1, "", 0);
         return;
       }
-      this.productService.findById(param.id)
+      this.userService.findById(param.id)
         .then(res => {
           this.isError = false;
-          this.product = res;
+          this.user = res;
         })
         .catch(err => {
           console.error(err);
@@ -36,14 +36,15 @@ export class ProductFormComponent implements OnInit {
   }
 
   public save() {
-    this.productService.save(this.product)
+    this.userService.save(this.user)
       .then(() => {
         this.isError = false;
-        this.router.navigateByUrl('/product');
+        this.router.navigateByUrl('/user');
       })
       .catch(err => {
         console.error(err);
         this.isError = true;
       });
   }
+
 }

@@ -2,86 +2,76 @@ package ru.geekbrains.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import ru.geekbrains.exception.NotFoundException;
-import ru.geekbrains.persist.Product;
-import ru.geekbrains.interfaces.ProductService;
-import ru.geekbrains.service.ProductListParam;
 
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+
+import ru.geekbrains.persist.Product;
+import ru.geekbrains.interfaces.ProductInter;
+import ru.geekbrains.persist.ProductParams;
+
 
 
 
 @Controller
-@RequestMapping(value = "/product")
+@RequestMapping("/product")
 public class ProductController {
-
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    private final ProductService productService;
+    private final ProductInter productInter;
 
     @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductInter productInter) {
+        this.productInter = productInter;
     }
 
     @GetMapping
     public String listPage(Model model,
-                           ProductListParam productListParam) {
+                           ProductParams productParams) {
         logger.info("Product list page requested");
 
-        model.addAttribute("products", productService.findWithFilter(productListParam));
+        model.addAttribute("products", productInter.findWithFilter(productParams));
 
-        return "products";
+        return "product";
     }
 
     @GetMapping("/new")
-    public String newUserForm(Model model) {
+    public String newProductForm(Model model) {
         logger.info("New product page requested");
-        model.addAttribute("product", new Product());
 
+        model.addAttribute("product", new Product());
         return "product_form";
     }
 
     @GetMapping("/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
-        logger.info("Edit product page requested");
-        model.addAttribute("product", productService.findById(id));
-
+        model.addAttribute("product", productInter.findById(id));
         return "product_form";
     }
 
-    @PostMapping
-    public String update(@Valid Product product, BindingResult result) {
-        logger.info("Saving product");
-
-        if (result.hasErrors()) {
-            return "product_form";
+    @PostMapping("/add")
+    public String update(Product product) {
+        if(product.getId()==null){
+            logger.info("Add product"+product);
+            productInter.save(product);
+        } else {
+            logger.info("Update product"+product);
+            productInter.save(product);
         }
-
-        productService.save(product);
-
         return "redirect:/product";
     }
 
-    @GetMapping("/delete/{id}")
+
+    @GetMapping("/del/{id}")
     public String delete(@PathVariable("id") Long id) {
-        logger.info("Deleting product");
-        productService.deleteById(id);
-
+        logger.info("Delete product id "+id);
+        productInter.deleteById(id);
         return "redirect:/product";
     }
 
-    @ExceptionHandler
-    public ModelAndView notFoundExceptionHandler(NotFoundException ex) {
-        ModelAndView modelAndView = new ModelAndView("not_found");
-        modelAndView.addObject("message", ex.getMessage());
-        modelAndView.setStatus(HttpStatus.NOT_FOUND);
-        return modelAndView;
-    }
+
+
+
 }

@@ -1,22 +1,25 @@
 package ru.geekbrains.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.exception.BadRequestException;
 import ru.geekbrains.exception.NotFoundException;
-import ru.geekbrains.interfaces.ProductService;
 import ru.geekbrains.persist.Product;
-import ru.geekbrains.service.ProductListParam;
+import ru.geekbrains.persist.ProductParams;
+import ru.geekbrains.service.ProductService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
-public class ProductRestController {
+public class ProductResource {
+
     private final ProductService productService;
 
-    public ProductRestController(ProductService productService) {
-        this.productService = productService;
+    @Autowired
+    public ProductResource(ProductService productService){
+        this.productService=productService;
     }
 
     @GetMapping(path = "/all", produces = "application/json")
@@ -25,8 +28,8 @@ public class ProductRestController {
     }
 
     @GetMapping(path = "/filter", produces = "application/json")
-    public Page<Product> findWithFilter(ProductListParam productListParam) {
-        return productService.findWithFilter(productListParam);
+    public Page<Product> findWithFilter(ProductParams productParams) {
+        return productService.findWithFilter(productParams);
     }
 
     @GetMapping(path = "/{id}", produces = "application/json")
@@ -45,11 +48,11 @@ public class ProductRestController {
     }
 
     @PutMapping(produces = "application/json")
-    public void update(@RequestBody Product product) {
-        if (product.getId() == null) {
+    public void update(@RequestBody Product user) {
+        if (user.getId() == null) {
             throw new BadRequestException("User Id shouldn't be null");
         }
-        productService.save(product);
+        productService.save(user);
     }
 
     @DeleteMapping(path = "/{id}", produces = "application/json")
