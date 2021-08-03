@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import ru.geekbrains.interfaces.UserRepository;
 
 import java.util.Collections;
+import java.util.stream.Collectors;
+
+
+
 
 
 @Service
@@ -24,9 +28,11 @@ public class UserAuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .map(user -> new User(user.getUsername(),
-                        user.getPassword(),
-                        Collections.singleton(new SimpleGrantedAuthority("ADMIN"))
-                )).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+                .map(user -> User.builder()
+                        .username(user.getUsername())
+                        .password(user.getPassword())
+                        .roles(user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).stream().toArray(String[]::new))
+                        .build()
+                ).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 }

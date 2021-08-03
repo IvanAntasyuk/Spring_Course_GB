@@ -15,16 +15,38 @@ public class SecurityConfiguration {
     public void authConfig(AuthenticationManagerBuilder auth,
                            PasswordEncoder passwordEncoder,
                            UserAuthService userAuthService) throws Exception {
-
         auth.inMemoryAuthentication()
                 .withUser("mem_user")
-                .password(passwordEncoder.encode("mem_user"))
-                .roles("ADMIN")
+                .password(passwordEncoder.encode("mem_user")) //шифрование пароля в оперативной памяти
+                .roles("SUPER_ADMIN")
                 .and()
                 .withUser("mem_guest")
                 .password(passwordEncoder.encode("mem_guest"))
                 .roles("GUEST");
 
         auth.userDetailsService(userAuthService);
+    }
+
+    @Configuration
+    public static class UiWebSecurityConfigAdapter extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .authorizeRequests()
+                    .antMatchers("/**/*.css", "/**/*.js").permitAll()
+                    .antMatchers("/product/**").permitAll()
+                    .antMatchers("/user/new").permitAll()
+                    .antMatchers("/user/**").hasAnyRole("ADMIN","SUPER_ADMIN")
+                    .antMatchers("/access_denied").authenticated()
+                    .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login_processing")
+                    .defaultSuccessUrl("/product")
+                    .and()
+                    .exceptionHandling()
+                    .accessDeniedPage("/access_denied");
+        }
     }
 }
